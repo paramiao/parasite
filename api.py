@@ -62,12 +62,16 @@ class APITestHandler(BaseHandler):
 #async http request test
 class AsyncTestHandler(BaseHandler):
     @tornado.web.asynchronous
-    def get(self, kw):
+    @tornado.gen.coroutine
+    def get(self):
         http_client = tornado.httpclient.AsyncHTTPClient()
         response = yield http_client.fetch(
             config.testurl,
-            headers={})
-        self.write(response)
+            headers={
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) \
+                AppleWebKit/537.36 (KHTML, like Gecko) \
+                Chrome/33.0.1750.58 Safari/537.36'})
+        self.write(response.body)
 
 
 def main():
